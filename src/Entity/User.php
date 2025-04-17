@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User extends Personne
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

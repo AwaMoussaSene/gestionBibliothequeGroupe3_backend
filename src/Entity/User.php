@@ -2,107 +2,121 @@
 
 namespace App\Entity;
 
-use App\Enum\Role;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User extends Personne
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    // #[ORM\Id]
-    // #[ORM\GeneratedValue]
-    // #[ORM\Column]
-    // private ?int $id = null;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $mdp = null;
+    #[ORM\Column(length: 180)]
+    private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $login = null;
+    /**
+     * @var list<string> The user roles
+     */
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     *
+     * @return list<string>
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param list<string> $roles
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+
     
-    #[ORM\Column(enumType: Role::class)]
-    private Role $role;
-
+    //src\Entity\User.php
+    //...
+    
     /**
-     * @var Collection<int, Pret>
+     * Méthode getUsername qui permet de retourner le champ qui est utilisé pour l'authentification.
+     *
+     * @return string
      */
-    #[ORM\OneToMany(targetEntity: Pret::class, mappedBy: 'user')]
-    private Collection $prets;
-
-    public function __construct()
-    {
-        $this->prets = new ArrayCollection();
-    }
-
-    // public function getId(): ?int
-    // {
-    //     return $this->id;
-    // }
-
-    public function getMdp(): ?string
-    {
-        return $this->mdp;
-    }
-
-    public function setMdp(string $mdp): static
-    {
-        $this->mdp = $mdp;
-
-        return $this;
-    }
-
-    public function getLogin(): ?string
-    {
-        return $this->login;
-    }
-
-    public function setLogin(string $login): static
-    {
-        $this->login = $login;
-
-        return $this;
-    }
-
-        public function getRole(): Role
-    {
-        return $this->role;
-    }
-
-    public function setRole(Role $role): self
-    {
-        $this->role = $role;
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Pret>
-     */
-    public function getPrets(): Collection
-    {
-        return $this->prets;
-    }
-
-    public function addPret(Pret $pret): static
-    {
-        if (!$this->prets->contains($pret)) {
-            $this->prets->add($pret);
-            $pret->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removePret(Pret $pret): static
-    {
-        if ($this->prets->removeElement($pret)) {
-            // set the owning side to null (unless already changed)
-            if ($pret->getUser() === $this) {
-                $pret->setUser(null);
-            }
-        }
-
-        return $this;
+    public function getUsername(): string {
+        return $this->getUserIdentifier();
     }
 }

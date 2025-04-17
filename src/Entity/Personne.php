@@ -2,28 +2,35 @@
 
 namespace App\Entity;
 
-use App\Repository\PersonneRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PersonneRepository::class)]
+#[ORM\Entity]
+#[ORM\InheritanceType("JOINED")]
+#[ORM\DiscriminatorColumn(name: "type", type: "string")]
+#[ORM\DiscriminatorMap([
+    "personne" => Personne::class,
+    "auteur" => Auteur::class,
+    "user" => User::class
+])]
+#[ORM\Table(name: "personnes")]
 class Personne
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: "integer")]
+    protected ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    protected ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
+    protected ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    protected ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $telephone = null;
+    protected ?string $telephone = null;
 
     public function getId(): ?int
     {
@@ -38,7 +45,6 @@ class Personne
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -50,7 +56,6 @@ class Personne
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
         return $this;
     }
 
@@ -62,7 +67,6 @@ class Personne
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -74,7 +78,6 @@ class Personne
     public function setTelephone(string $telephone): static
     {
         $this->telephone = $telephone;
-
         return $this;
     }
 }

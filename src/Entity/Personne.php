@@ -26,8 +26,6 @@ class Personne
     #[ORM\Column(length: 255)]
     protected ?string $prenom = null;
 
-    
-
     #[ORM\Column(length: 255)]
     protected ?string $telephone = null;
 

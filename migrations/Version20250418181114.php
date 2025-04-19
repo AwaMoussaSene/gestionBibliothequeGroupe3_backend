@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250415120446 extends AbstractMigration
+final class Version20250418181114 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,7 +21,7 @@ final class Version20250415120446 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            CREATE TABLE auteur (id INT AUTO_INCREMENT NOT NULL, profession VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            CREATE TABLE auteur (id INT NOT NULL, profession VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE auteur_ouvrage (id INT AUTO_INCREMENT NOT NULL, auteur_id INT DEFAULT NULL, ouvrage_id INT DEFAULT NULL, INDEX IDX_EC8A08BD60BB6FE6 (auteur_id), INDEX IDX_EC8A08BD15D884B5 (ouvrage_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
@@ -39,7 +39,7 @@ final class Version20250415120446 extends AbstractMigration
             CREATE TABLE ouvrage (id INT AUTO_INCREMENT NOT NULL, code VARCHAR(255) NOT NULL, titre VARCHAR(255) NOT NULL, date_edition DATE NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE personne (id INT AUTO_INCREMENT NOT NULL, nom VARCHAR(255) NOT NULL, prenom VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, telephone VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            CREATE TABLE personnes (id INT AUTO_INCREMENT NOT NULL, nom VARCHAR(255) NOT NULL, prenom VARCHAR(255) NOT NULL, telephone VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE pret (id INT AUTO_INCREMENT NOT NULL, exemplaire_id INT DEFAULT NULL, user_id INT DEFAULT NULL, date_demande DATE NOT NULL, date_pret DATE NOT NULL, date_retour DATE NOT NULL, date_retour_reel DATE NOT NULL, statut VARCHAR(255) NOT NULL, INDEX IDX_52ECE9795843AA21 (exemplaire_id), INDEX IDX_52ECE979A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
@@ -48,7 +48,10 @@ final class Version20250415120446 extends AbstractMigration
             CREATE TABLE rayon (id INT AUTO_INCREMENT NOT NULL, libelle VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, mdp VARCHAR(255) NOT NULL, login VARCHAR(255) NOT NULL, role VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE auteur ADD CONSTRAINT FK_55AB140BF396750 FOREIGN KEY (id) REFERENCES personnes (id) ON DELETE CASCADE
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE auteur_ouvrage ADD CONSTRAINT FK_EC8A08BD60BB6FE6 FOREIGN KEY (auteur_id) REFERENCES auteur (id)
@@ -79,6 +82,9 @@ final class Version20250415120446 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql(<<<'SQL'
+            ALTER TABLE auteur DROP FOREIGN KEY FK_55AB140BF396750
+        SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE auteur_ouvrage DROP FOREIGN KEY FK_EC8A08BD60BB6FE6
         SQL);
@@ -122,7 +128,7 @@ final class Version20250415120446 extends AbstractMigration
             DROP TABLE ouvrage
         SQL);
         $this->addSql(<<<'SQL'
-            DROP TABLE personne
+            DROP TABLE personnes
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE pret

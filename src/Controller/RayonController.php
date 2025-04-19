@@ -48,7 +48,7 @@ final class RayonController extends AbstractController
         ], 201);
     }
 
-    #[Route('/rayon/{id}', name: 'update_rayon', methods: ['PUT'])]
+    #[Route('/rayons/{id}', name: 'update_rayon', methods: ['PUT'])]
     public function updateRayon(RayonRepository $rayonRepository, Request $request, EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $rayon = $rayonRepository->find($id);
@@ -72,7 +72,7 @@ final class RayonController extends AbstractController
         ]);
     }
 
-    #[Route('/rayon/{id}', name: 'delete_rayon', methods: ['DELETE'])]
+    #[Route('/rayons/{id}', name: 'delete_rayon', methods: ['DELETE'])]
     public function deleteRayon(RayonRepository $rayonRepository, EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $rayon = $rayonRepository->find($id);

@@ -9,68 +9,31 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class User   extends personne implements UserInterface, PasswordAuthenticatedUserInterface 
+class User extends Personne implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    // #[ORM\Column]
-    // private ?int $id = null;
-
-   
-
-    /**
-     * @var list<string> The user roles
-     */
-    #[ORM\Column]
+    #[ORM\Column(type: "json")]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
-    // public function getId(): ?int
-    // {
-    //     return $this->id;
-    // }
+    
+    #[ORM\Column(length: 180)]
+    private ?string $email = null;
 
-   
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-   
-
-    /**
-     * @see UserInterface
-     *
-     * @return list<string>
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
+        $roles[] = 'ROLE_USER'; // Garantir que chaque utilisateur ait au moins un rôle "ROLE_USER"
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -79,30 +42,32 @@ class User   extends personne implements UserInterface, PasswordAuthenticatedUse
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // Effacez toute donnée temporaire sensible, le cas échéant
     }
 
-
-    
-    //src\Entity\User.php
-    //...
-    
-    /**
-     * Méthode getUsername qui permet de retourner le champ qui est utilisé pour l'authentification.
-     *
-     * @return string
-     */
-    public function getUsername(): string {
+    public function getUsername(): string
+    {
         return $this->getUserIdentifier();
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
     }
 }

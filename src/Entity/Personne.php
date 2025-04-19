@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
     "user" => User::class
 ])]
 #[ORM\Table(name: "personnes")]
-   class Personne 
+class Personne 
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,14 +26,10 @@ use Doctrine\ORM\Mapping as ORM;
     #[ORM\Column(length: 255)]
     protected ?string $prenom = null;
 
-    
-
     #[ORM\Column(length: 255)]
     protected ?string $telephone = null;
 
-    #[ORM\Column(length: 180)]
-    private ?string $email = null;
-
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -61,19 +57,8 @@ use Doctrine\ORM\Mapping as ORM;
         return $this;
     }
 
-  
+    
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
     public function getTelephone(): ?string
     {
         return $this->telephone;
@@ -85,9 +70,5 @@ use Doctrine\ORM\Mapping as ORM;
         return $this;
     }
 
-
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
+   
 }

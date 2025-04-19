@@ -26,8 +26,7 @@ class Personne
     #[ORM\Column(length: 255)]
     protected ?string $prenom = null;
 
-    #[ORM\Column(length: 255)]
-    protected ?string $email = null;
+    
 
     #[ORM\Column(length: 255)]
     protected ?string $telephone = null;
@@ -59,16 +58,8 @@ class Personne
         return $this;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
+  
 
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-        return $this;
-    }
 
     public function getTelephone(): ?string
     {

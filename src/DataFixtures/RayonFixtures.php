@@ -17,7 +17,7 @@ class RayonFixtures extends Fixture
             $rayon->setLibelle($libelle);
             $manager->persist($rayon);
         }
-
+        
         $manager->flush();
     }
 }

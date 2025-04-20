@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OuvrageRepository::class)]
 class Ouvrage
@@ -14,39 +15,47 @@ class Ouvrage
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['ouvrage:read'])]
+    
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['ouvrage:read'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['ouvrage:read'])]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['ouvrage:read'])]
     private ?\DateTimeInterface $dateEdition = null;
 
     /**
      * @var Collection<int, Exemplaire>
      */
     #[ORM\OneToMany(targetEntity: Exemplaire::class, mappedBy: 'ouvrage')]
+    #[Groups(['ouvrage:read'])]
     private Collection $exemplaires;
 
     /**
      * @var Collection<int, MotCleOuvrage>
      */
     #[ORM\OneToMany(targetEntity: MotCleOuvrage::class, mappedBy: 'ouvrage')]
+    #[Groups(['ouvrage:read'])]
     private Collection $motCleOuvrages;
 
     /**
      * @var Collection<int, AuteurOuvrage>
      */
     #[ORM\OneToMany(targetEntity: AuteurOuvrage::class, mappedBy: 'ouvrage')]
+    #[Groups(['ouvrage:read'])]
     private Collection $auteurOuvrages;
 
     public function __construct()
     {
         $this->exemplaires = new ArrayCollection();
-        $this->motCles = new ArrayCollection();
+        // $this->motCles = new ArrayCollection();
         $this->motCleOuvrages = new ArrayCollection();
         $this->auteurOuvrages = new ArrayCollection();
     }

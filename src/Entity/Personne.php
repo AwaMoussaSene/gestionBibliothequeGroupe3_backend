@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "type", type: "string")]
 #[ORM\DiscriminatorMap([
-    "personne" => Personne::class,
+    // "personne" => Personne::class,
     "auteur" => Auteur::class,
-    "user" => User::class
+    "user" => User ::class
 ])]
 #[ORM\Table(name: "personnes")]
 class Personne 

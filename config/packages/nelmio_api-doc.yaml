@@ -1,0 +1,350 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: "API Gestion de Bibliothèque"
+            version: "1.0.0"
+            description: "API pour le système de gestion de bibliothèque du Groupe 3"
+        components:
+            securitySchemes:
+                bearerAuth:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - bearerAuth: []
+        paths:
+            # Documentation pour OuvrageController
+            /api/ouvrages/list:
+                get:
+                    tags: ['Ouvrages']
+                    summary: "Liste tous les ouvrages"
+                    responses:
+                        '200':
+                            description: "Liste des ouvrages"
+            /api/ouvrages/add:
+                post:
+                    tags: ['Ouvrages']
+                    summary: "Ajoute un nouvel ouvrage"
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        code:
+                                            type: string
+                                        titre:
+                                            type: string
+                                        dateEdition:
+                                            type: string
+                                            format: date
+                    responses:
+                        '201':
+                            description: "Ouvrage créé avec succès"
+            /api/ouvrages/{id}:
+                get:
+                    tags: ['Ouvrages']
+                    summary: "Récupère un ouvrage par son ID"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Détails de l'ouvrage"
+            /api/ouvrages/edit/{id}:
+                put:
+                    tags: ['Ouvrages']
+                    summary: "Met à jour un ouvrage"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        code:
+                                            type: string
+                                        titre:
+                                            type: string
+                                        dateEdition:
+                                            type: string
+                                            format: date
+                    responses:
+                        '200':
+                            description: "Ouvrage modifié avec succès"
+            /api/ouvrages/delete/{id}:
+                delete:
+                    tags: ['Ouvrages']
+                    summary: "Supprime un ouvrage"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Ouvrage supprimé avec succès"
+                            
+            # Documentation pour AuteurController
+            /AuteurCreat:
+                post:
+                    tags: ['Auteurs']
+                    summary: "Crée un nouvel auteur"
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                    responses:
+                        '201':
+                            description: "Auteur créé avec succès"
+            /api/auteur:
+                get:
+                    tags: ['Auteurs']
+                    summary: "Liste tous les auteurs"
+                    security:
+                        - bearerAuth: []
+                    responses:
+                        '200':
+                            description: "Liste des auteurs"
+            /api/deleteauteur/{id}:
+                delete:
+                    tags: ['Auteurs']
+                    summary: "Supprime un auteur"
+                    security:
+                        - bearerAuth: []
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Auteur supprimé avec succès"
+            /api/auteur/{id}:
+                put:
+                    tags: ['Auteurs']
+                    summary: "Met à jour un auteur"
+                    security:
+                        - bearerAuth: []
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                    responses:
+                        '200':
+                            description: "Auteur modifié avec succès"
+                            
+            # Documentation pour RayonController
+            /rayons:
+                get:
+                    tags: ['Rayons']
+                    summary: "Liste tous les rayons"
+                    responses:
+                        '200':
+                            description: "Liste des rayons"
+            /rayon:
+                post:
+                    tags: ['Rayons']
+                    summary: "Ajoute un nouveau rayon"
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        libelle:
+                                            type: string
+                    responses:
+                        '201':
+                            description: "Rayon créé avec succès"
+            /rayons/{id}:
+                put:
+                    tags: ['Rayons']
+                    summary: "Met à jour un rayon"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        libelle:
+                                            type: string
+                    responses:
+                        '200':
+                            description: "Rayon mis à jour avec succès"
+                delete:
+                    tags: ['Rayons']
+                    summary: "Supprime un rayon"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Rayon supprimé avec succès"
+                            
+            # Documentation pour UserController
+            /api/register:
+                post:
+                    tags: ['Utilisateurs']
+                    summary: "Enregistre un nouvel utilisateur"
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        email:
+                                            type: string
+                                            format: email
+                                        nom:
+                                            type: string
+                                        prenom:
+                                            type: string
+                                        telephone:
+                                            type: string
+                                        role:
+                                            type: string
+                                        password:
+                                            type: string
+                                            format: password
+                    responses:
+                        '201':
+                            description: "Utilisateur enregistré avec succès"
+            /api/logout:
+                post:
+                    tags: ['Utilisateurs']
+                    summary: "Déconnexion de l'utilisateur"
+                    responses:
+                        '200':
+                            description: "Déconnexion réussie"
+            /api/adherents:
+                get:
+                    tags: ['Utilisateurs']
+                    summary: "Liste tous les adhérents"
+                    responses:
+                        '200':
+                            description: "Liste des adhérents"
+                            
+            # Documentation pour PretController
+            /api/prets/{id}:
+                get:
+                    tags: ['Prêts']
+                    summary: "Détails d'un prêt"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Détails du prêt"
+            /api/pret/{id}/accepter:
+                put:
+                    tags: ['Prêts']
+                    summary: "Accepter un prêt"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Prêt accepté avec succès"
+            /api/pret/{id}/refuser:
+                put:
+                    tags: ['Prêts']
+                    summary: "Refuser un prêt"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Prêt refusé avec succès"
+            /api/prets/{id}/demarrer:
+                put:
+                    tags: ['Prêts']
+                    summary: "Démarrer un prêt"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Prêt démarré avec succès"
+            /api/prets:
+                get:
+                    tags: ['Prêts']
+                    summary: "Liste tous les prêts"
+                    responses:
+                        '200':
+                            description: "Liste des prêts"
+            /api/mes-prets:
+                get:
+                    tags: ['Prêts']
+                    summary: "Liste des prêts de l'adhérent connecté"
+                    security:
+                        - bearerAuth: []
+                    responses:
+                        '200':
+                            description: "Liste des prêts de l'adhérent"
+            /api/pret/{id}/retour:
+                put:
+                    tags: ['Prêts']
+                    summary: "Enregistrer le retour d'un prêt"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Retour de prêt enregistré"
+            /api/prets/adherent/{id}:
+                get:
+                    tags: ['Prêts']
+                    summary: "Liste des prêts d'un adhérent"
+                    parameters:
+                        - name: id
+                          in: path
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        '200':
+                            description: "Liste des prêts de l'adhérent"
+                    

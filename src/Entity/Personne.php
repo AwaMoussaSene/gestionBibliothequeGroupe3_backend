@@ -8,12 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "type", type: "string")]
 #[ORM\DiscriminatorMap([
-    "personne" => Personne::class,
+    // "personne" => Personne::class,
     "auteur" => Auteur::class,
-    "user" => User::class
+    "user" => User ::class
 ])]
 #[ORM\Table(name: "personnes")]
-class Personne
+class Personne 
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,11 +26,10 @@ class Personne
     #[ORM\Column(length: 255)]
     protected ?string $prenom = null;
 
-    
-
     #[ORM\Column(length: 255)]
     protected ?string $telephone = null;
 
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -58,8 +57,7 @@ class Personne
         return $this;
     }
 
-  
-
+    
 
     public function getTelephone(): ?string
     {
@@ -71,4 +69,6 @@ class Personne
         $this->telephone = $telephone;
         return $this;
     }
+
+   
 }

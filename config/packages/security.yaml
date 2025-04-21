@@ -32,5 +32,5 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/auteur, roles: RB }
-        - { path: ^/api/deleteauteur, roles: RB }
+        # - { path: ^/api/auteur, roles: RB }
+        # - { path: ^/api/deleteauteur, roles: RB }

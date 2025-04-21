@@ -52,13 +52,17 @@ final class AuteurcontrollerController extends AbstractController
     public function getAllauteur(AuteurRepository $auteurRepository,SerializerInterface $serializer): JsonResponse
     {
 
-        $this->denyAccessUnlessGranted('RB');
+        // $this->denyAccessUnlessGranted('RB');
         $auteurList= $auteurRepository->findAll();
         $jsonauteurList = $serializer->serialize($auteurList, 'json');
         return new JsonResponse(
-            ['message' => 'la liste des auteurs '],
+            [
+                'message' => 'la liste des auteurs',
+                'auteurs' => json_decode($jsonauteurList)
+            ],
             Response::HTTP_OK
         );
+        
     }
 
 
@@ -66,40 +70,58 @@ final class AuteurcontrollerController extends AbstractController
     public function deleteAuteur(Auteur $auteur, EntityManagerInterface $em): JsonResponse 
     {
 
-        $this->denyAccessUnlessGranted('RB');
+        // $this->denyAccessUnlessGranted('RB');
         $em->remove($auteur);
         $em->flush();
 
         
     return new JsonResponse(
-        ['message' => 'Auteur supprimé avec succès'],
+        ['message' => 'Auteur supprimé avec succès',
+
+        
+
+    ],
+        
         Response::HTTP_OK
     );
     }
 
 
 
-
-    #[Route('/api/auteur/{id}', name:"updateauteur", methods:['PUT'])]
-
-    public function updateauteur(Request $request, SerializerInterface $serializer, auteur $currentauteur, EntityManagerInterface $em, ): JsonResponse 
-    {
-
-        $this->denyAccessUnlessGranted('RB');
-        $updatedauteur = $serializer->deserialize($request->getContent(), 
-                auteur::class, 
-                'json', 
-                [AbstractNormalizer::OBJECT_TO_POPULATE => $currentauteur]);
-        // $content = $request->toArray();
-        // $idAuthor = $content['idAuthor'] ?? -1;
-        // $updatedauteur->setAuthor($authorRepository->find($idAuthor));
-        
-        $em->persist($updatedauteur);
+    #[Route('/api/auteur/{id}', name: 'update_auteur', methods: ['PUT'])]
+    public function updateAuteur(
+        int $id,
+        AuteurRepository $auteurRepo,
+        Request $request,
+        SerializerInterface $serializer,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $auteur = $auteurRepo->find($id);
+    
+        if (!$auteur) {
+            return new JsonResponse(['message' => 'Auteur non trouvé'], 404);
+        }
+    
+        $serializer->deserialize(
+            $request->getContent(),
+            Auteur::class,
+            'json',
+            [AbstractNormalizer::OBJECT_TO_POPULATE => $auteur]
+        );
+    
+        $em->persist($auteur);
         $em->flush();
-        
-    return new JsonResponse(
-        ['message' => 'Auteur Modifier  avec succès'],
-        Response::HTTP_OK
-    );
-}
+    
+        return new JsonResponse([
+            'message' => 'Auteur mis à jour avec succès',
+            'auteur' => [
+                'id' => $auteur->getId(),
+                'nom' => $auteur->getNom(),
+                'prenom' => $auteur->getPrenom(),
+                'telephone' => $auteur->getTelephone(),
+                'profession' => $auteur->getProfession(),
+            ]
+        ], JsonResponse::HTTP_OK);
+    }
+    
 }

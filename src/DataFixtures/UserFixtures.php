@@ -31,13 +31,14 @@ class UserFixtures extends Fixture
         
         $hashedPassword = $this->passwordHasher->hashPassword($ADHERENT, 'visit@123');
         $ADHERENT->setPassword($hashedPassword);
+        $this->addReference("user_1", $ADHERENT);
         
         $manager->persist($ADHERENT);
         
         // 🔹 Utilisateur RP
         $rp = new User();
         $rp->setNom('Sarr');
-        $rp->setPrenom('responsable pédagogique');
+        $rp->setPrenom('responsablepédagogique');
         $rp->setEmail('rp@gmail.com');
         $rp->setTelephone('+221770000111');
         $rp->setRoles(['RP']);
@@ -62,5 +63,6 @@ class UserFixtures extends Fixture
         
 
         $manager->flush();
+
     }
 }
